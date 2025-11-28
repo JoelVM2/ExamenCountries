@@ -9,13 +9,16 @@ namespace ExamenCountries.Model
 {
     public class Country
     {
-        [JsonPropertyName("name")]
-        public string Name { get; set; } = "";
-        [JsonPropertyName("capital")]
-        public string Capital { get; set; } = "";
-        [JsonPropertyName("region")]
-        public string Region { get; set; } = "";
-        [JsonPropertyName("population")]
-        public string Population { get; set; } = "";
+        public NameInfo Name { get; set; }
+        public List<string>? Capital { get; set; }
+        public string Region { get; set; }
+        public long Population { get; set; }   
+    }
+
+
+    public class NameInfo
+    {
+        public string Common { get; set; }
+        public string Official { get; set; }
     }
 }

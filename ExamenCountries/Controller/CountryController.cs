@@ -2,10 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExamenCountries.Controller
 {
@@ -32,29 +30,29 @@ namespace ExamenCountries.Controller
                 }
 
                 var content = await response.Content.ReadAsStringAsync();
+
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 };
 
-                ApiResponse? apiResponse = JsonSerializer.Deserialize<ApiResponse>(content);
+                // La API devuelve un array de países
+                List<Country>? countries = JsonSerializer.Deserialize<List<Country>>(content, options);
 
-                if (apiResponse?.Results == null || apiResponse.Results.Count == 0)
+                if (countries == null || countries.Count == 0)
                 {
                     Console.WriteLine("No se encontraron países.");
                     return null;
                 }
 
-                Country countries= apiResponse.Results.FirstOrDefault();
-                if (countries == null)
-                    return null;
+                Country country = countries.First();
 
                 return new SavedItem
                 {
-                    Name = countries.Name,
-                    Capital = countries.Capital,
-                    Region = countries.Region,
-                    Population = countries.Population
+                    Name = country.Name.Common,
+                    Capital = country.Capital?.FirstOrDefault() ?? "N/A",
+                    Region = country.Region,
+                    Population = country.Population, // long → long
                 };
             }
             catch (Exception ex)
